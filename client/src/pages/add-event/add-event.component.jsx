@@ -94,22 +94,22 @@ function AddEvent({history}) {
       }
      }
 
-     const handleUpload = () => {
+    const handleUpload = () => {
       let formData = new FormData();
       formData.append("file", file);
-            console.log("Upload opened")
-            console.log(formData);
-            axios.post('/upload', formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
-            }).then(response => {
-                setEventCredentials({...eventCredentails, image: response.data.url})
-                console.log('File Uploaded')
-            }).catch(error => {
-                console.log(error);
-            })
-        }
+      console.log("Upload opened")
+      console.log(formData);
+      axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+      }).then(response => {
+          setEventCredentials({...eventCredentails, image: response.data.url})
+          console.log('File Uploaded')
+      }).catch(error => {
+          console.log(error);
+      })
+    }
     const handleSubmit = async event =>{
         event.preventDefault();
         axios({
