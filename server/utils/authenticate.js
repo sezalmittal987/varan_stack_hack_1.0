@@ -2,6 +2,8 @@ const admin = require('../firebase/firebase');
 const { User } = require('../models/user');
 
 exports.verifyUser = async function (req, res, next) {
+    next();
+    return;  ///TODO -CHANGE
     try {
         let bearerToken = req.header("Authorization");
         if (bearerToken) {

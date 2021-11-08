@@ -37,7 +37,7 @@ async function registerUserForEvent(userId, eventId , registrationType, noOfTick
             phoneNumber : phoneNumber
         }).save().then((data)=>{
             if(!data) throw new Error('User Not registered!');
-            await addRegisteredEvent(userId, data._id,  (res) => {
+            addRegisteredEvent(userId, data._id,  (res) => {
                 if(res.status === 0) throw new Error(res.message);
                 updateEvent(eventId, data.noOfTickets, data.registrationType, 1, (res2)=>{
                     if(res2.status === 0) throw new Error(res2.message);

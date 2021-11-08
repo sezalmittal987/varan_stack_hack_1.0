@@ -122,8 +122,8 @@ router.post('/showCreatedEvents' , verifyUser, async(req, res ) => {
         return res.status(500).send({status : 0 , message : err}) ;
     }
 })
-
-router.post('/showEvents' , verifyUser, async(req, res ) => {
+// verifyUser,
+router.post('/showEvents' ,  async(req, res ) => {
     let {limit, pageNumber } = req.body || {} ;
     try{
         await showEvents( pageNumber, limit, (data ) => {
@@ -186,7 +186,22 @@ router.post('/friend', verifyUser, async(req, res ) => {
 router.post('/event/:id' , verifyUser, async(req, res) =>{
     let eventId = req.params.id;
     try{
-        Event.findOne({ _id : eventId }).exec((err, res)=>{
+        Event.findOne({ _id : eventId })
+        .populate({path : 'comments', populate : { path : 'userId' , select : 'name' }})
+        .populate({ path : 'users', select : 'name email _id' })
+        .exec((err, res)=>{
+            if(err || !res) throw new Error(err || 'Event not found!');
+            return res.status(500).send({status : 1 , event : res });
+        })
+    }catch(err){
+        return res.status(500).send({status : 0 , message : err}) ;
+    }
+})
+
+router.post('/chart/:id' , verifyUser, async(req, res) =>{
+    let eventId = req.params.id;
+    try{
+        Event.findOne({ _id : eventId } , 'group corporate others self').exec((err, res)=>{
             if(err || !res) throw new Error(err || 'Event not found!');
             return res.status(500).send({status : 1 , event : res });
         })

@@ -62,15 +62,15 @@ export default function CommentBox({eventId,comments}) {
     console.log(eventId);  
     event.preventDefault();
       axios({
-          method: 'put',
-          url: '/comment',
+          method: 'post',
+          url: 'user/commentEvent',  
           data: {
-              _id: eventId,
-              name: commentCredentials.name,
-              comment: commentCredentials.comment  
+              eventId : eventId,
+              userId : commentCredentials.name, ///TODO : USERID
+              content : commentCredentials.comment  
           }
       }).then(response => {
-          alert("Comment succesful")
+          alert("Comment successful")
           setCommentCredentials({
               name: '',
               comment: ''
@@ -129,8 +129,8 @@ export default function CommentBox({eventId,comments}) {
                 <div className = {classes.comments}>
                 {comments.map(comment => (
                  <div className = {classes.commentBox}>
-                    <Typography variant = 'caption'>{comment.user}</Typography>
-                    <Typography variant = 'body1'>{comment.comment}</Typography>
+                    <Typography variant = 'caption'>{comment.userId.name}</Typography>
+                    <Typography variant = 'body1'>{comment.content}</Typography>
                     <hr />
                     </div> ))}
                 </div>

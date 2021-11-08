@@ -1,7 +1,9 @@
 import {AdminActionTypes} from './admin.types'
 
+ //TODO : ToChange
 const INITIAL_STATE = {
-    isAdmin: false
+    // isAdmin: false,
+    isAdmin: true
     
 }
 

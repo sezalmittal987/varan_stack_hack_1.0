@@ -43,7 +43,7 @@ let eventSchema = new Schema({
         type : Number,
         default : 0,
     },
-    other : {
+    others : {
         type : Number,
         default : 0,
     },
@@ -55,7 +55,7 @@ let eventSchema = new Schema({
         type : Number,
     },
     averageRating : {
-        type : Double,
+        type : Number,
     },
     ratings : [{
         type : Schema.Types.ObjectId,
@@ -126,10 +126,10 @@ async function showCreatedEvents(userId, limit, pageNumber , cb){
     }
 }
 
-async function showEvents( pageNumber, limit ){
+async function showEvents( pageNumber, limit, cb ){
     try{
         Event.find({}).sort({ "$natural": -1 }).skip(limit*pageNumber).limit(limit).exec((err, res) =>{
-            if(!res || err ) throw new Error(err || 'No output!');
+            if( err ) throw new Error(err);
             return cb({status : 1, events  : res});
         })
     }catch(err){
@@ -166,7 +166,7 @@ async function addRating(eventId, ratingId, ratingCount, rate, cb){
 async function updateEvent(eventId, noOfTickets, registrationType, increase, cb){
     let query;
     if(registrationType === 'self') query = {$inc : {numberOfTickets : noOfTickets , self : increase}};
-    if(registrationType === 'other') query = {$inc : {numberOfTickets : noOfTickets , other : increase}};
+    if(registrationType === 'others') query = {$inc : {numberOfTickets : noOfTickets , others : increase}};
     if(registrationType === 'corporate') query = {$inc : {numberOfTickets : noOfTickets , corporate : increase}};
     if(registrationType === 'group') query = {$inc : {numberOfTickets : noOfTickets , group : increase}};
     try { 

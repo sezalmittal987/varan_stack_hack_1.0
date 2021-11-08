@@ -13,11 +13,12 @@ export default class UserChart extends React.Component {
   componentDidMount(){
     const {eventId} = this.props;
     axios({
-      method: 'get',
-      url: `/chart/${eventId}`
+      method: 'post',
+      url: `chart/${eventId}`
     }).then(response => {
       console.log("Chart Response", response.data);
-      const chartData = response.data;
+      if(response.data.status === 0 ) throw new Error(response.data.message);    
+      const chartData = response.data.event;
       const data = [];
       data.push(chartData["corporate"])
       data.push(chartData["group"])

@@ -12,69 +12,48 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    
+    height : '100%',
+    display : 'flex',
+    flexDirection : 'column',
   },
   media: {
     height: "200px",
-   
   },
- 
   cardContent: {
-      flexGrow: 1
+    flexGrow: 1
   }
-
 }));
 const EventCard = ({event,history}) => {
     const classes = useStyles();
     const {name, image, location, _id} = event;
     return(
-            <Card className = {classes.card}>
-                
-                    <CardActionArea>
-                        <CardMedia
-                        image = {image}
-                        title = {name} 
-                        className = {classes.media}
-                        title = {name}
-                        />
-                        <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                        {name}
-                        </Typography>
-                        <Typography>
-                        {location}
-                        </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" color="primary" onClick = {() => history.push(`/event/${_id}`)}>
-                            Learn More
-                            </Button>
-                            <Button size="small" color="primary" onClick = {() => history.push(`/event/${_id}/register`)}>
-                            Register
-                            </Button>
-                        </CardActions>
-                    </CardActionArea>
-                    
-
-                     
-
-                     
-
-                
-            </Card>
-  );
+      <Card className = {classes.card}>
+          <CardActionArea>
+              <CardMedia
+                image = {image}
+                title = {name} 
+                className = {classes.media}
+                title = {name}
+              />
+              <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="h5" component="h2">
+              {name}
+              </Typography>
+              <Typography>
+              {location}
+              </Typography>
+              </CardContent>
+              <CardActions>
+                  <Button size="small" color="primary" onClick = {() => history.push(`/event/${_id}`)}>
+                  Learn More
+                  </Button>
+                  <Button size="small" color="primary" onClick = {() => history.push(`/event/${_id}/register`)}>
+                  Register
+                  </Button>
+              </CardActions>
+          </CardActionArea> 
+      </Card>
+    );
 }
     
-
 export default withRouter(EventCard);
-
-/**
-
-
-
-
- */

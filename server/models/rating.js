@@ -30,8 +30,8 @@ async function rateEvent(eventId, userId, rate , cb){
     try{
         await new Rating(ratingEvent).save().then((data) => {
             if(!data) throw new Error('Rating not updated!');
-            let ratingCount = await Rating.countDocuments({eventId : eventId}).then().catch(err=>{throw new Error(err)});
-            await addRating(eventId, data._id, ratingCount, rate, (resp)=>{
+            let ratingCount = Rating.countDocuments({eventId : eventId}).then().catch(err=>{throw new Error(err)});
+            addRating(eventId, data._id, ratingCount, rate, (resp)=>{
                 if(!resp || resp.status === 0) throw new Error()
                 return cb({ status : 1, message : 'Rating added!' });
             } );
