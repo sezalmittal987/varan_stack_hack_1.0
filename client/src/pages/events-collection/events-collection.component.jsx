@@ -19,18 +19,23 @@ class CollectionPage extends React.Component{
         const {turnLoadingOff, turnLoadingOn} = this.props;
         turnLoadingOn();
         axios({
-            method: 'get',
-            url: '/home',
+            method: 'post',
+            url: '/user/showEvents',
+            data : {
+                pageNumber : 0,
+                limit : 1000
+            }
 
         }).then(response => {
-            this.setState({eventCollections: response.data})
+            if(response.data.status == 0) throw new Error(response.data.message);
+            this.setState({eventCollections: response.data.events})
             console.log(this.state);
             console.log('Fetched data')
             turnLoadingOff();
         })
         .catch(error => {
             console.log(error)
-            alert("couldn't fetch data")
+            alert("here!! couldn't fetch data")
             turnLoadingOff();
         })
     }

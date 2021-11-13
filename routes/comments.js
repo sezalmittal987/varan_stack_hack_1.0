@@ -18,7 +18,7 @@ router.post('/', (req, res, next)=>{
 			};
 			
 
-			if(comment == undefined)
+			if(comment === undefined)
 				comment = [data];
 			else
 				comment.push(data);

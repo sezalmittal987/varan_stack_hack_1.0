@@ -40,24 +40,26 @@ const EventPage = ({match,setName,isAdmin,history}) => {
     useEffect(() => {
 
         axios({
-            method: 'get',
-            url: `/event/${match.params.id}`
+            method: 'post',
+            url: `user/event/${match.params.id}`
         }).then(response => {
-            setEvent(response.data);
-            console.log(response.data);
+            if(response.data.message === 0) throw new Error(response.data.message);
+            setEvent(response.data.event);
+            // console.log(response.data);
             alert("Successful Request");
 
-            const {name} = response.data;
-            setName(name);
+            const { title } = response.data.event.title;
+            setName(title);
         }).catch(error => {
             console.log(error);
             alert("Error Occured");
         })
     },[])
-    const {name,_id,description,image,location,comments,users} = event;
+    const { title, _id, description, image, location, comments, users } = event;
         console.log(event);
-      const latitude = event.coordinates? event.coordinates.lat: 0;
-      const longitude = event.coordinates? event.coordinates.lng: 0;
+      const latitude = location? location.lat: 0;
+      const longitude = location? location.lng: 0;
+      //// TODO - handleDelete
         const handleDelete = () => {
             axios({
                 method: 'get',
@@ -75,7 +77,7 @@ const EventPage = ({match,setName,isAdmin,history}) => {
         const classes = useStyles();
         return(
           <div>
-            <Typography align = 'center' variant = 'h3'>{name}</Typography>
+            <Typography align = 'center' variant = 'h3'> {title}</Typography>
            <Container maxWidth = 'md' className = {classes.container} >
            <Card className = {classes.card}>
            <CardMedia

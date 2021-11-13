@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import storage from '../../firebase'; 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -71,7 +72,7 @@ function AddEvent({history}) {
         name: '',
         description: '',
         image: '',
-        location: ''
+        location: {},
     })
     const {name,description,image,location} = eventCredentails;
     const handleChange = event => {
@@ -94,44 +95,40 @@ function AddEvent({history}) {
       }
      }
 
-     const handleUpload = () => {
-      let formData = new FormData();
-      formData.append("file", file);
-            console.log("Upload opened")
-            console.log(formData);
-            axios.post('/upload', formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
-            }).then(response => {
-                setEventCredentials({...eventCredentails, image: response.data.url})
-                console.log('File Uploaded')
-            }).catch(error => {
-                console.log(error);
-            })
-        }
+    const handleUpload = () => {
+      if(file == null) return;
+      storage.ref(`/images/event`).put(file).then(snapshot => snapshot.ref.getDownloadURL())
+      .then((url) => {
+        console.log(url);
+        setEventCredentials({...eventCredentails, image : url})
+      console.log('File Uploaded')
+        alert("Video Uploaded");
+      })
+    }
+    //TODO - add userId, date, duration, covidFree
     const handleSubmit = async event =>{
         event.preventDefault();
         axios({
-            url: '/event/new',
+            url: 'server/user/addEvent',
             method: 'post',
             data: {
-                name: name,
+                title: name,
                 description: description,
                 image: image,
-                location: location,
-                lat: position.latitude,
-                lng: position.longitude,
+                location: {
+                  name : location,
+                  lat: position.latitude,
+                  lng: position.longitude,
+                }
             }
         }).then(response => {
+          if(response.data.status === 0 ) throw new Error(response.data.message);
             alert('Request Sent');
             history.push("/");
         })
         .catch(error => {
             console.log('Error: ',error);
-            alert(
-                'Some problem while adding the event'
-            )
+            alert('Some problem while adding the event');
         })
     }
 
