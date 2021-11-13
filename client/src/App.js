@@ -12,6 +12,8 @@ import {selectAdminPresent} from './redux/admin/admin.selector'
 import UserRegister from './pages/user-register-and-preview/user-register-and-preview.component';
 import UserProfile from './pages/user-profile/user-profile.component'
 import {selectIsLoading} from './redux/single-event/single-event.selectors'
+import UserLogin from './pages/user-login/user-login.component';
+import UserSignup from './pages/user-signup/user-signup-component';
 function App({isAdmin}) {
   console.log("Admin: ")
   console.log(isAdmin);
@@ -33,6 +35,8 @@ function App({isAdmin}) {
         <Route exact path = "/event/:id" component = {EventPage} />
         <Route exact path = "/event/:id/register" component = {UserRegister} />
         <Route exact path = "/user/:id" component = {UserProfile} />
+        <Route exact path = "/login" component = {UserLogin} />
+        <Route exact path = "/signup" component = {UserSignup} />
 
       </Switch>
    </div>
