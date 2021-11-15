@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
-import storage from '../../firebase'; 
+import firebase from 'firebase';
+import '../../firebase'; 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -97,7 +98,9 @@ function AddEvent({history}) {
 
     const handleUpload = () => {
       if(file == null) return;
-      storage.ref(`/images/event`).put(file).then(snapshot => snapshot.ref.getDownloadURL())
+      console.log(file);
+      var storage = firebase.storage();
+      storage.ref(`/images/EV_${name}_${Date.now()}`).put(file).then(snapshot => snapshot.ref.getDownloadURL())
       .then((url) => {
         console.log(url);
         setEventCredentials({...eventCredentails, image : url})
@@ -107,9 +110,10 @@ function AddEvent({history}) {
     }
     //TODO - add userId, date, duration, covidFree
     const handleSubmit = async event =>{
+        
         event.preventDefault();
         axios({
-            url: 'server/user/addEvent',
+            url: 'http://localhost:5000/user/addEvent',
             method: 'post',
             data: {
                 title: name,
@@ -127,7 +131,8 @@ function AddEvent({history}) {
             history.push("/");
         })
         .catch(error => {
-            console.log('Error: ',error);
+        console.log(name, description, image, location);
+        console.log('Error: ',error);
             alert('Some problem while adding the event');
         })
     }

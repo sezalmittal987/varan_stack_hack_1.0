@@ -43,8 +43,8 @@ router.post('/register' , async(req, res)=>{
         return res.status(500).send({status : 0 , message : err});
     }
 })
-
-router.post('/addEvent' , verifyUser, async(req, res) =>{
+// verifyUser,
+router.post('/addEvent' ,  async(req, res) =>{
     let { userId, title, description, image, date, location, duration, covidFree  } = req.body || {};
     let eventBody = {
         title : title,
@@ -62,6 +62,7 @@ router.post('/addEvent' , verifyUser, async(req, res) =>{
             return res.status(200).send({status : 1 , message : data.message});
         })
     }catch(err){
+        console.log(err);
         return res.status(500).send({status : 0 , message : err}) ;
     }
 })

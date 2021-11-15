@@ -14,6 +14,8 @@ import {setAdmin} from '../../redux/admin/admin.actions'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {selectEventName} from '../../redux/single-event/single-event.selectors'
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 
 const useStyles = makeStyles((theme) => ({
     previewText: {
@@ -70,6 +72,17 @@ const UserProfile = ({match}) => {
         // After entering the details, this funciton is called with all the data
         // userCredentials contains the name, email and vaccination status
         // file uploaded is in 'file' variable
+        // const auth = getAuth();
+        // createUserWithEmailAndPassword(auth, email, password)
+        // .then((userCredential) => {
+        //     const user = userCredential.user;
+        //     console.log(user);
+        // })
+        // .catch((error) => {
+        //     const errorCode = error.code;
+        //     const errorMessage = error.message;
+        //     /// TODO - error message
+        // });
         console.log(userCredentials);
         console.log(file);
     }
