@@ -15,6 +15,8 @@ import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {selectEventName} from '../../redux/single-event/single-event.selectors'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {userLogin} from '../../redux/admin/admin.actions'
+import {selectUser} from '../../redux/admin/admin.selector';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
         // margin: theme.spacing(3, 0, 2),
       },
 }))
-const UserProfile = ({match}) => {
+const UserProfile = ({match,userLogin,userToken}) => {
     console.log(match.params.id)
     const classes = useStyles();
     const [file,setFile] = useState(null);
@@ -83,8 +85,12 @@ const UserProfile = ({match}) => {
         //     const errorMessage = error.message;
         //     /// TODO - error message
         // });
+        // console.log(userToken);
+        let token = "dfddfd";
         console.log(userCredentials);
         console.log(file);
+        userLogin(token); // add bearer token in parameter
+
     }
 
     const {name,email,isVaccinated} = userCredentials;
@@ -154,4 +160,12 @@ const UserProfile = ({match}) => {
                                  </Container>
     )
 }
-export default UserProfile;
+
+const mapDispatchToProps = dispatch => ({
+    userLogin: token => dispatch(userLogin(token))
+})
+
+const mapStateToProps = createStructuredSelector({
+    userToken: selectUser
+})
+export default connect(mapStateToProps,mapDispatchToProps)(UserProfile);

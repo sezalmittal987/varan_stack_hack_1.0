@@ -14,6 +14,8 @@ import {setAdmin} from '../../redux/admin/admin.actions'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {selectEventName} from '../../redux/single-event/single-event.selectors'
+import {selectUser} from '../../redux/admin/admin.selector';
+
 
 const useStyles = makeStyles((theme) => ({
     previewText: {
@@ -40,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         // margin: theme.spacing(3, 0, 2),
       },
 }))
-const UserProfile = ({match}) => {
+const UserProfile = ({match, userToken}) => {
     console.log(match.params.id)
     const classes = useStyles();
     const [userCredentials, setUserCredentials] =
@@ -55,14 +57,13 @@ const UserProfile = ({match}) => {
     }
     const handleSubmit = () =>{
         // on clicking submit button this happens
+        console.log(userToken);
         console.log(userCredentials);
     }
     return(
                                 <Container component = "main" maxWidth = "xs">
                                     <CssBaseline />
-
                                     <div className = {classes.paper}>
-
                                         <TextField
                                         variant="standard"
                                         margin="normal"
@@ -99,4 +100,7 @@ const UserProfile = ({match}) => {
                                  </Container>
     )
 }
-export default UserProfile;
+const mapStateToProps = createStructuredSelector({
+    userToken: selectUser
+})
+export default connect(mapStateToProps,null)(UserProfile);
