@@ -15,6 +15,9 @@ import {setAdmin} from '../../redux/admin/admin.actions'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {selectEventName} from '../../redux/single-event/single-event.selectors'
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {userLogin} from '../../redux/admin/admin.actions'
+import {selectUser} from '../../redux/admin/admin.selector';
 import firebaseConfig from '../../firebase';
 
 
@@ -44,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         // margin: theme.spacing(3, 0, 2),
       },
 }))
-const UserProfile = ({match}) => {
+const UserProfile = ({match,userLogin,userToken}) => {
     console.log(match.params.id)
     const classes = useStyles();
     const [file,setFile] = useState(null);
@@ -74,6 +77,19 @@ const UserProfile = ({match}) => {
         // After entering the details, this funciton is called with all the data
         // userCredentials contains the name, email and vaccination status
         // file uploaded is in 'file' variable
+        // const auth = getAuth();
+        // createUserWithEmailAndPassword(auth, email, password)
+        // .then((userCredential) => {
+        //     const user = userCredential.user;
+        //     console.log(user);
+        // })
+        // .catch((error) => {
+        //     const errorCode = error.code;
+        //     const errorMessage = error.message;
+        //     /// TODO - error message
+        // });
+        // console.log(userToken);
+        let token = "dfddfd";
         firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
@@ -87,16 +103,16 @@ const UserProfile = ({match}) => {
             axios({
                 method: 'post',
                 url: `http://localhost:5000/userapi/register`,
-                headers:{                                                                                                                                                                                                                                              
-                    Authorization: 'Bearer '+token,                                                                                                                                                                                                                 
+                headers:{
+                    Authorization: 'Bearer '+token,
                 },
                 data : {
-                    name : name, 
-                    email : email, 
-                    password : password, 
-                    isVaccinated : isVaccinated, 
+                    name : name,
+                    email : email,
+                    password : password,
+                    isVaccinated : isVaccinated,
                     vaccinationCertificate : file,
-                } 
+                }
             }).then(response => {
                 if(response.data.message === 0) throw new Error(response.data.message);
                 alert("Successful Request");
@@ -105,17 +121,19 @@ const UserProfile = ({match}) => {
                 alert("Error Occured");
                 firebase.auth().currentUser.delete().then(() => {
                 }).catch((error) => {
-                    alert('unable to login!'); 
+                    alert('unable to login!');
                 });
             })
         })
         .catch((error) => {
             console.error(error);
-            
+
             alert('please try again!');
         })
         console.log(userCredentials);
         console.log(file);
+        userLogin(token); // add bearer token in parameter
+
     }
     const {name,email,isVaccinated, password} = userCredentials;
     const handleFileChange = (event) =>{
@@ -192,4 +210,12 @@ const UserProfile = ({match}) => {
                                  </Container>
     )
 }
-export default UserProfile;
+
+const mapDispatchToProps = dispatch => ({
+    userLogin: token => dispatch(userLogin(token))
+})
+
+const mapStateToProps = createStructuredSelector({
+    userToken: selectUser
+})
+export default connect(mapStateToProps,mapDispatchToProps)(UserProfile);

@@ -20,14 +20,14 @@ class CollectionPage extends React.Component{
         turnLoadingOn();
         axios({
             method: 'post',
-            url: '/userapi/showEvents',
+            url: 'https://varan.herokuapp.com/userapi/showEvents',
             data : {
                 pageNumber : 0,
                 limit : 1000
             }
 
         }).then(response => {
-            if(response.data.status == 0) throw new Error(response.data.message);
+            if(response.data.status === 0) throw new Error(response.data.message);
             this.setState({eventCollections: response.data.events})
             console.log(response.data);
             console.log('Fetched data')
