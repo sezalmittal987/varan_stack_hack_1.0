@@ -27,7 +27,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import PinDropIcon from '@material-ui/icons/PinDrop';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import firebaseConfig from '../../firebase';
 
+firebase.initializeApp(firebaseConfig);
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -113,7 +115,7 @@ function AddEvent({history}) {
         event.preventDefault();
         axios({
             method: 'post',
-            url: `user/addEvent`,
+            url: `userapi/addEvent`,
             data: {
                 title: name,
                 description: description,

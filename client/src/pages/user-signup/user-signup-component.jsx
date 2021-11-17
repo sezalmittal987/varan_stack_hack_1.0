@@ -1,5 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import axios from 'axios'
+import firebase from 'firebase'
 import {makeStyles} from '@material-ui/styles'
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -14,7 +15,8 @@ import {setAdmin} from '../../redux/admin/admin.actions'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {selectEventName} from '../../redux/single-event/single-event.selectors'
-import firebase from '../../firebase';
+import firebaseConfig from '../../firebase';
+
 
 const useStyles = makeStyles((theme) => ({
     previewText: {
@@ -84,7 +86,7 @@ const UserProfile = ({match}) => {
             // return response.json({ token });
             axios({
                 method: 'post',
-                url: `/user/login`,
+                url: `http://localhost:5000/userapi/register`,
                 headers:{                                                                                                                                                                                                                                              
                     Authorization: 'Bearer '+token,                                                                                                                                                                                                                 
                 },
@@ -101,10 +103,15 @@ const UserProfile = ({match}) => {
             }).catch(error => {
                 console.log(error);
                 alert("Error Occured");
+                firebase.auth().currentUser.delete().then(() => {
+                }).catch((error) => {
+                    alert('unable to login!'); 
+                });
             })
         })
         .catch((error) => {
             console.error(error);
+            
             alert('please try again!');
         })
         console.log(userCredentials);

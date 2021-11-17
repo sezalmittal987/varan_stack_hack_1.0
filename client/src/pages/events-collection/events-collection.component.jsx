@@ -20,7 +20,7 @@ class CollectionPage extends React.Component{
         turnLoadingOn();
         axios({
             method: 'post',
-            url: '/user/showEvents',
+            url: '/userapi/showEvents',
             data : {
                 pageNumber : 0,
                 limit : 1000

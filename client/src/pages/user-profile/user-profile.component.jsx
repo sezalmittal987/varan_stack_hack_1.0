@@ -31,7 +31,7 @@ const UserProfile = ({match}) => {
     useEffect(() => {
         axios({
             method: 'get',
-            url: `/user/${match.params.id}`
+            url: `/userapi/${match.params.id}`
         }).then(response => {
             console.log(response.data);
             alert('fetched');
