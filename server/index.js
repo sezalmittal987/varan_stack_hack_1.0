@@ -19,13 +19,13 @@ let server = http.createServer(app);
 app.use(express.json());
 
 //Routes
-app.use('/user', userRouter );
-app.use('/admin' , adminRouter );
+app.use('/userapi', userRouter );
+app.use('/adminapi' , adminRouter );
 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.setHeader("Access-Control-Max-Age", "1800");
+    res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // res.setHeader("Access-Control-Max-Age", "1800");
     res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
     next();
 });

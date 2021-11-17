@@ -1,4 +1,4 @@
-.env
-node_modules
-firebase/firebase-config.js
-firebase/firebase-cred.json
+# .env
+# node_modules
+# firebase/firebase-config.js
+# firebase/firebase-cred.json
