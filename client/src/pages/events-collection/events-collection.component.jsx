@@ -20,7 +20,7 @@ class CollectionPage extends React.Component{
         turnLoadingOn();
         axios({
             method: 'post',
-            url: '/user/showEvents',
+            url: '/userapi/showEvents',
             data : {
                 pageNumber : 0,
                 limit : 1000
@@ -29,13 +29,13 @@ class CollectionPage extends React.Component{
         }).then(response => {
             if(response.data.status == 0) throw new Error(response.data.message);
             this.setState({eventCollections: response.data.events})
-            console.log(this.state);
+            console.log(response.data);
             console.log('Fetched data')
             turnLoadingOff();
         })
         .catch(error => {
             console.log(error)
-            alert("here!! couldn't fetch data")
+            alert("Couldn't fetch data")
             turnLoadingOff();
         })
     }

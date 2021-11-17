@@ -31,7 +31,7 @@ function App({isAdmin}) {
               <SignIn />
             )
         } />
-        <Route exact path = "/user/addEvent" component = {AddEvent} />
+        <Route exact path = "/addEvent" component = {AddEvent} />
         <Route exact path = "/event/:id" component = {EventPage} />
         <Route exact path = "/event/:id/register" component = {UserRegister} />
         <Route exact path = "/user/:id" component = {UserProfile} />

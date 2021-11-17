@@ -27,8 +27,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import PinDropIcon from '@material-ui/icons/PinDrop';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import firebaseConfig from '../../firebase';
 
-
+firebase.initializeApp(firebaseConfig);
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -72,7 +73,7 @@ function AddEvent({history}) {
     const [eventCredentails,setEventCredentials] = useState({
         name: '',
         description: '',
-        image: '',
+        image: "https://www.ntu.ac.uk/__data/assets/image/0020/271820/Default-event.jpg",
         location: {},
     })
     const {name,description,image,location} = eventCredentails;
@@ -105,7 +106,7 @@ function AddEvent({history}) {
         console.log(url);
         setEventCredentials({...eventCredentails, image : url})
       console.log('File Uploaded')
-        alert("Video Uploaded");
+        alert("Image Uploaded");
       })
     }
     //TODO - add userId, date, duration, covidFree
@@ -113,8 +114,8 @@ function AddEvent({history}) {
         
         event.preventDefault();
         axios({
-            url: 'http://localhost:5000/user/addEvent',
             method: 'post',
+            url: `userapi/addEvent`,
             data: {
                 title: name,
                 description: description,

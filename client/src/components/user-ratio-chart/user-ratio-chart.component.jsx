@@ -14,7 +14,7 @@ export default class UserChart extends React.Component {
     const {eventId} = this.props;
     axios({
       method: 'post',
-      url: `chart/${eventId}`
+      url: `/user/chart/${eventId}`
     }).then(response => {
       console.log("Chart Response", response.data);
       if(response.data.status === 0 ) throw new Error(response.data.message);    

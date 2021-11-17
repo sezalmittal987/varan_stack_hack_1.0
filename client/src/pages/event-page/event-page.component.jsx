@@ -41,7 +41,7 @@ const EventPage = ({match,setName,isAdmin,history}) => {
 
         axios({
             method: 'post',
-            url: `user/event/${match.params.id}`
+            url: `/userapi/event/${match.params.id}`
         }).then(response => {
             if(response.data.message === 0) throw new Error(response.data.message);
             setEvent(response.data.event);

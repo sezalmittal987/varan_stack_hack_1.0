@@ -43,7 +43,7 @@ router.post('/register' , async(req, res)=>{
         return res.status(500).send({status : 0 , message : err});
     }
 })
-// verifyUser,
+// 
 router.post('/addEvent' ,  async(req, res) =>{
     let { userId, title, description, image, date, location, duration, covidFree  } = req.body || {};
     let eventBody = {
@@ -67,7 +67,7 @@ router.post('/addEvent' ,  async(req, res) =>{
     }
 })
 
-router.post('/deleteEvent', verifyUser , async(req, res ) => {
+router.post('/deleteEvent',  async(req, res ) => {
     let { eventId, userId } = req.body || {} ;
     try{
         await deleteEvent(eventId , userId , (data ) => {
@@ -79,7 +79,7 @@ router.post('/deleteEvent', verifyUser , async(req, res ) => {
     }
 })
 
-router.post('/editEvent', verifyUser , async(req, res ) => {
+router.post('/editEvent',  async(req, res ) => {
     let { eventId , title, description, image, date, location, duration, covidFree  } = req.body || {};
     let eventBody = {
         title : title,
@@ -100,7 +100,7 @@ router.post('/editEvent', verifyUser , async(req, res ) => {
     }
 })
 
-router.post('/showRegisteredEvents', verifyUser , async(req, res ) => {
+router.post('/showRegisteredEvents',  async(req, res ) => {
     let { userId, limit, pageNumber } = req.body || {} ;
     try{
         await showRegisteredEvents( userId , limit , pageNumber,  (data ) => {
@@ -112,7 +112,7 @@ router.post('/showRegisteredEvents', verifyUser , async(req, res ) => {
     }
 })
 
-router.post('/showCreatedEvents' , verifyUser, async(req, res ) => {
+router.post('/showCreatedEvents' ,  async(req, res ) => {
     let { userId, limit, pageNumber } = req.body || {} ;
     try{
         await showCreatedEvents( userId , limit , pageNumber,  (data ) => {
@@ -123,7 +123,7 @@ router.post('/showCreatedEvents' , verifyUser, async(req, res ) => {
         return res.status(500).send({status : 0 , message : err}) ;
     }
 })
-// verifyUser,
+// 
 router.post('/showEvents' ,  async(req, res ) => {
     let {limit, pageNumber } = req.body || {} ;
     try{
@@ -136,7 +136,7 @@ router.post('/showEvents' ,  async(req, res ) => {
     }
 })
 
-router.post('/rateEvent', verifyUser, async(req, res ) => {
+router.post('/rateEvent',  async(req, res ) => {
     let { eventId, userId, rate} = req.body || {} ;
     try{
         await rateEvent( eventId, userId , rate,  ( data ) => {
@@ -148,7 +148,7 @@ router.post('/rateEvent', verifyUser, async(req, res ) => {
     }
 })
 
-router.post('/commentEvent', verifyUser, async(req, res ) => {
+router.post('/commentEvent',  async(req, res ) => {
     let { eventId, userId, content} = req.body || {} ;
     try{
         await commentEvent( eventId, userId , content,  ( data ) => {
@@ -160,7 +160,7 @@ router.post('/commentEvent', verifyUser, async(req, res ) => {
     }
 })
 
-router.post('/subscribe', verifyUser, async(req, res ) => {
+router.post('/subscribe',  async(req, res ) => {
     let { userId } = req.body || {} ;
     try{
         await addSubscription( userId,  ( data ) => {
@@ -172,7 +172,7 @@ router.post('/subscribe', verifyUser, async(req, res ) => {
     }
 })
 
-router.post('/friend', verifyUser, async(req, res ) => {
+router.post('/friend',  async(req, res ) => {
     let { user1 , user2 } = req.body || {} ;
     try{
         await friendUser ( user1, user2,  ( data ) => {
@@ -183,35 +183,36 @@ router.post('/friend', verifyUser, async(req, res ) => {
         return res.status(500).send({status : 0 , message : err}) ;
     }
 })
-
-router.post('/event/:id' , verifyUser, async(req, res) =>{
+// 
+router.post('/event/:id' ,  async(req, res) =>{
     let eventId = req.params.id;
+    // console.log(eventId);
     try{
         Event.findOne({ _id : eventId })
         .populate({path : 'comments', populate : { path : 'userId' , select : 'name' }})
         .populate({ path : 'users', select : 'name email _id' })
-        .exec((err, res)=>{
-            if(err || !res) throw new Error(err || 'Event not found!');
-            return res.status(500).send({status : 1 , event : res });
+        .exec((err, resP)=>{
+            if(err || !resP)  return res.status(500).send({ status : 0 , message : err  || 'Event not found!'}) ;
+            return res.status(200).send({ status : 1 , event : resP });
         })
     }catch(err){
-        return res.status(500).send({status : 0 , message : err}) ;
+        return res.status(500).send({ status : 0 , message : err }) ;
     }
 })
 
-router.post('/chart/:id' , verifyUser, async(req, res) =>{
+router.post('/chart/:id' ,  async(req, res) =>{
     let eventId = req.params.id;
     try{
-        Event.findOne({ _id : eventId } , 'group corporate others self').exec((err, res)=>{
-            if(err || !res) throw new Error(err || 'Event not found!');
-            return res.status(500).send({status : 1 , event : res });
+        Event.findOne({ _id : eventId } , 'group corporate others self').exec((err, resP)=>{
+            if(err || !resP) throw new Error(err || 'Event not found!');
+            return res.status(200).send({status : 1 , event : resP });
         })
     }catch(err){
         return res.status(500).send({status : 0 , message : err}) ;
     }
 })
 
-router.post('/registerForEvent' , verifyUser, async(req, res) =>{
+router.post('/registerForEvent' ,  async(req, res) =>{
     let { userId, eventId , registrationType, noOfTickets, phoneNumber } = req.body || {};
     try{
         await registerUserForEvent(userId, eventId , registrationType, noOfTickets, phoneNumber , (data) =>{
@@ -223,7 +224,7 @@ router.post('/registerForEvent' , verifyUser, async(req, res) =>{
     }
 })
 
-router.post('/deleteRegistration' , verifyUser, async(req, res) => {
+router.post('/deleteRegistration' ,  async(req, res) => {
     let { userId, eventId } = req.body || {};
     try{
         await deleteRegistrationForUser(userId, eventId , (data) =>{

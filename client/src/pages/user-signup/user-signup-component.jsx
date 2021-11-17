@@ -1,5 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import axios from 'axios'
+import firebase from 'firebase'
 import {makeStyles} from '@material-ui/styles'
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -17,6 +18,7 @@ import {selectEventName} from '../../redux/single-event/single-event.selectors'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import {userLogin} from '../../redux/admin/admin.actions'
 import {selectUser} from '../../redux/admin/admin.selector';
+import firebaseConfig from '../../firebase';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +55,7 @@ const UserProfile = ({match,userLogin,userToken}) => {
     useState({
         name: '',
         email: '',
+        password : '',
         isVaccinated: false,
     });
     const handleChange = event => {
@@ -87,16 +90,63 @@ const UserProfile = ({match,userLogin,userToken}) => {
         // });
         // console.log(userToken);
         let token = "dfddfd";
+        firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((data) => {
+            return data.user.getIdToken();
+        })
+        .then((token) => {
+            ///TODO : store this token
+            console.log(token);
+            // return response.json({ token });
+            axios({
+                method: 'post',
+                url: `http://localhost:5000/userapi/register`,
+                headers:{
+                    Authorization: 'Bearer '+token,
+                },
+                data : {
+                    name : name,
+                    email : email,
+                    password : password,
+                    isVaccinated : isVaccinated,
+                    vaccinationCertificate : file,
+                }
+            }).then(response => {
+                if(response.data.message === 0) throw new Error(response.data.message);
+                alert("Successful Request");
+            }).catch(error => {
+                console.log(error);
+                alert("Error Occured");
+                firebase.auth().currentUser.delete().then(() => {
+                }).catch((error) => {
+                    alert('unable to login!');
+                });
+            })
+        })
+        .catch((error) => {
+            console.error(error);
+
+            alert('please try again!');
+        })
         console.log(userCredentials);
         console.log(file);
         userLogin(token); // add bearer token in parameter
 
     }
-
-    const {name,email,isVaccinated} = userCredentials;
+    const {name,email,isVaccinated, password} = userCredentials;
     const handleFileChange = (event) =>{
-        const imageFile = event.target.files[0];
-           setFile(imageFile);
+            const file = event.target.files[0];
+           setFile(file);
+            var storage = firebase.storage();
+            storage.ref(`/files/VC_${name}_${Date.now()}`).put(file).then(snapshot => snapshot.ref.getDownloadURL())
+            .then((url) => {
+                console.log(url);
+                setUserCredentials({...userCredentials, file : url})
+                console.log('File Uploaded');
+                alert("File Uploaded");
+            })
        }
     return(
                                 <Container component = "main" maxWidth = "xs">

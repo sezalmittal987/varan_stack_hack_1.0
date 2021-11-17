@@ -77,7 +77,7 @@ let eventSchema = new Schema({
 
 async function addEvent( eventBody, cb ) {
     try{
-        await new Event(eventBody).save.then((event) =>{
+        await new Event(eventBody).save().then((event) =>{
             addCreatedEvent(event._id, eventBody.registeredBy, (res)=>{
                 if(res.status === 0) throw new Error(res.message || 'Event not added to the user!');
                 return cb({status : 1 , message : 'Event Saved!', event : event });
