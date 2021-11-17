@@ -40,7 +40,7 @@ const EventCard = ({event,history}) => {
               {name}
               </Typography>
               <Typography>
-              {location}
+              {location.name}
               </Typography>
               </CardContent>
               <CardActions>

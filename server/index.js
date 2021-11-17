@@ -23,7 +23,7 @@ app.use('/user', userRouter );
 app.use('/admin' , adminRouter );
 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Max-Age", "1800");
     res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
@@ -34,8 +34,9 @@ app.use(function(req, res, next) {
 const cors = require('cors');
 
 const corsOptions ={
-    origin:'http://localhost:3000', 
+    origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
 }
 
 app.use(cors(corsOptions));
